@@ -1,26 +1,61 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container grid-lg my-2 text-dark">
+    <div class="card">
+      <div class="card-header">
+        <div class="h4">Exibindo as moedas</div>
+      </div>
+
+      <div class="card-body">
+        <TabelaMoedas :quotes="quotes" />
+      </div>
+
+    </div>
+
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TabelaMoedas from './components/TabelaMoedas.vue';
+import api from './server/api';
+import { onMounted, reactive, toRefs } from 'vue';
+
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld
+    TabelaMoedas
+
+  },
+//expor API no component
+setup() {
+  const data = reactive ({ //dados reativos em vuejs
+
+    quotes: {},
+
+  });
+
+  onMounted(async()=> {
+    const response = await api.all();
+    data.quotes = response.data;
+  })
+
+  return {
+    ...toRefs(data)
   }
+
+}
+
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.h4 {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-bottom: 10px;
+}
+
+.card {
+  box-shadow: inset 0 0 1em black, 0 0 1em blueviolet;
 }
 </style>
